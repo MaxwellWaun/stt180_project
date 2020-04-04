@@ -1,0 +1,29 @@
+---
+title: "Course evaluations and simple linear regression"
+author: "Maxwell Waun"
+date: "April 3"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    number_sections: false
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+# global chunk options
+knitr::opts_chunk$set(echo = TRUE,
+                      error = TRUE,
+                      message = FALSE, 
+                      warning = FALSE,
+                      comment = NA,
+                      fig.width=6, 
+                      fig.height=5)
+```
+
+```{r}
+#This is sample code for the project 
+```
+
+
