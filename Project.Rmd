@@ -1,0 +1,30 @@
+---
+title: "Project"
+author: "Junyu Chen"
+date: "4/4/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(dplyr)
+library(tidyr)
+
+CFB<-read.csv("CFB2019.csv")
+
+#create a subset only include "Team","Games","Win.Loss","Off.Rank","Def.Rank"
+CFB_sub<-CFB[c("Team","Games","Win.Loss","Off.Rank","Def.Rank")]
+
+#add a colume Win.Game which tells us the team win that game or not
+CFB_sub<-CFB_sub %>%
+  separate(Win.Loss, c("Win", "Loss"), "-") %>% 
+  mutate(Win.Game = case_when(Win>Loss~1, Win<Loss~2, Win==Loss~0))
+
+CFB_sub %>% group_by(Win.Game) %>% summarise(mean(Def.Rank),median(Def.Rank))
+```
+
