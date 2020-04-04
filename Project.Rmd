@@ -26,5 +26,7 @@ CFB_sub<-CFB_sub %>%
   mutate(Win.Game = case_when(Win>Loss~1, Win<Loss~2, Win==Loss~0))
 
 CFB_sub %>% group_by(Win.Game) %>% summarise(mean(Def.Rank),median(Def.Rank))
+
+## testing
 ```
 
