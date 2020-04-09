@@ -35,6 +35,8 @@ CFB_sub %>%
   summarise(mean(Def.Rank),mean(Off.Yards.per.Game),median(Def.Rank),median(Off.Yards.per.Game))
 
 CFB_sub %>% ggplot(aes(as.factor(Win.Game),Def.Rank))+geom_boxplot(fill="Green")+xlab("Win Game")+ylab("Yards per game they gave up")
+
+## test twice
 ```
 
 
