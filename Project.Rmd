@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## R Markdown
@@ -17,7 +17,7 @@ library(tidyr)
 library(ggplot2)
 library(gridExtra)
 library(WVPlots)
-alibrary(ggExtra)
+library(ggExtra)
 
 CFB<-read.csv("CFB2019.csv")
 ```
@@ -32,9 +32,10 @@ p1 <- CFB %>% ggplot(aes(Off.Rank,Winpct)) +geom_point()+stat_smooth(method = lm
 
 p2 <- CFB %>% ggplot(aes(Def.Rank,Winpct)) +geom_point()+stat_smooth(method = lm)+labs(title = "Win Percentage vs. Defensive Rank")
 
-plot_grid(p1, p2)
+#plot_grid(p1, p2)
 
-ggMarginal(p1, type="histogram")
+#ggMarginal(p1, type="histogram")
+#ggMarginal(p2, type="histogram")
 
 ScatterHist(CFB, "Off.Rank", "Winpct",
             smoothmethod="lm",
@@ -42,17 +43,45 @@ ScatterHist(CFB, "Off.Rank", "Winpct",
 
 ScatterHist(CFB, "Def.Rank", "Winpct",
             smoothmethod="lm",
-            title="Win Percentage vs. Offensive Rank")
+            title="Win Percentage vs. Defensive Rank")
 
-lm(Winpct~Off.Rank,data = CFB)
+
+
+lm(Winpct~Off.Rank,data = CFB) #better
 lm(Winpct~Def.Rank,data = CFB)
-lm(Winpct~Def.Rank+Off.Rank,data = CFB)
+
+
+```
+
+### Are special teams of particular value for a team’s performance?
+```{r}
+# Adjusted R2 does not increase if a new variable does not provide new information or is completely unrelated. Hence, we could use adjusted R2 for model selection.
+
+#creat a full model which contains all feacture related to special teams 
+full.model<-lm(Winpct~Kickoff.Return.Rank + 
+                 Kickoffs.Returned +
+                 Kickoff.Return.Yards +
+                 Kickoff.Return.Touchdowns +
+                 Avg.Yard.per.Kickoff.Return +
+                 Punt.Return.Rank+ 
+                 Redzone.Field.Goals.Made,data = CFB)
+
+#test which feacture are really relate to winpct 
+step(object = full.model,direction = "backward", trace = FALSE)
+
+CFB %>% ggplot(aes(Redzone.Field.Goals.Made,Winpct)) +geom_point(aes(color=Kickoffs.Returned,size=Kickoff.Return.Yards))+stat_smooth(method = lm)
+```
+
+
+### What’s the correlation between offensive and defensive performance?
+```{r}
+CFB
+
+CFB %>% 
+  separate(Team, c("College Team","NCAA"),sep = " (?=[^ ]+$)") 
 ```
 
 ```{r}
-CFB %>% 
-  separate(Team, c("College Team","NCAA"),sep = " (?=[^ ]+$)")
-
 CFB %>% 
   separate(Team, c("College Team","NCAA"),sep = " (?=[^ ]+$)")%>%
   ggplot(aes(x=NCAA,y=Winpct))+
@@ -60,4 +89,12 @@ CFB %>%
   ylab("Win Percentage")+xlab("NCAA")+coord_flip()
 ```
 
+### What’s the correlation between offensive and defensive performance?
+```{r}
+ScatterHist(CFB, "Def.Rank", "Off.Rank",
+            smoothmethod="lm",
+            title="Defensive Rank vs. Offensive Rank")
+
+lm(Def.Rank~Off.Rank,data = CFB)
+```
 
