@@ -15,29 +15,42 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(gridExtra)
+library(WVPlots)
+alibrary(ggExtra)
 
 CFB<-read.csv("CFB2019.csv")
 ```
 
 ### Does defense really win championships?
 ```{r}
+CFB<-CFB %>%
+  separate(Win.Loss, c("Win", "Loss"), "-") %>%
+  mutate(Winpct = as.numeric(Win)/Games,Avg.Rank=(Off.Rank+Def.Rank)/2)
 
-#create a subset only include "Team","Games","Win.Loss","Off.Rank","Def.Rank"
-CFB_sub<-CFB[c("Team","Games","Win.Loss","Off.Rank","Def.Rank","Off.Yards.per.Game")]
+p1 <- CFB %>% ggplot(aes(Winpct,Off.Rank)) +geom_point()+stat_smooth(method = lm)+labs(title = "Win Percentage vs. Offensive Rank")
 
-#add a colume Win.Game which tells us the team win that game or not
-CFB_sub<-CFB_sub %>%
-  separate(Win.Loss, c("Win", "Loss"), "-") %>% 
-  mutate(Win.Game = case_when(Win>Loss~1, Win<Loss~2, Win==Loss~0))
+p2 <- CFB %>% ggplot(aes(Winpct,Def.Rank)) +geom_point()+stat_smooth(method = lm)+labs(title = "Win Percentage vs. Defensive Rank")
 
-CFB_sub %>% 
-  group_by(Win.Game) %>% 
-  summarise(mean(Def.Rank),mean(Off.Yards.per.Game),median(Def.Rank),median(Off.Yards.per.Game))
+plot_grid(p1, p2)
 
-CFB_sub %>% ggplot(aes(as.factor(Win.Game),Def.Rank))+geom_boxplot(fill="Green")+xlab("Win Game")+ylab("Yards per game they gave up")
+ggMarginal(p1, type="histogram")
 
-## test twice
+ScatterHist(CFB, "Winpct", "Off.Rank",
+            smoothmethod="lm",
+            title="Win Percentage vs. Offensive Rank")
 ```
 
+```{r}
+CFB %>% separate(Team, c("College Team","NCAA"), " ",extra = "drop", fill = "right")
+CFB %>% 
+  separate(Team, c("College Team","NCAA")," ",)
+
+CFB %>% 
+  separate(Team, c("College Team","NCAA")," ")%>%
+  ggplot(aes(x=CFB$NCAA,y=Winpct))+
+  geom_bar(stat='identity',fill="blue")+
+  ylab("Win Percentage")+xlab("NCAA")+coord_flip()
+```
 
 
