@@ -28,27 +28,34 @@ CFB<-CFB %>%
   separate(Win.Loss, c("Win", "Loss"), "-") %>%
   mutate(Winpct = as.numeric(Win)/Games,Avg.Rank=(Off.Rank+Def.Rank)/2)
 
-p1 <- CFB %>% ggplot(aes(Winpct,Off.Rank)) +geom_point()+stat_smooth(method = lm)+labs(title = "Win Percentage vs. Offensive Rank")
+p1 <- CFB %>% ggplot(aes(Off.Rank,Winpct)) +geom_point()+stat_smooth(method = lm)+labs(title = "Win Percentage vs. Offensive Rank")
 
-p2 <- CFB %>% ggplot(aes(Winpct,Def.Rank)) +geom_point()+stat_smooth(method = lm)+labs(title = "Win Percentage vs. Defensive Rank")
+p2 <- CFB %>% ggplot(aes(Def.Rank,Winpct)) +geom_point()+stat_smooth(method = lm)+labs(title = "Win Percentage vs. Defensive Rank")
 
 plot_grid(p1, p2)
 
 ggMarginal(p1, type="histogram")
 
-ScatterHist(CFB, "Winpct", "Off.Rank",
+ScatterHist(CFB, "Off.Rank", "Winpct",
             smoothmethod="lm",
             title="Win Percentage vs. Offensive Rank")
+
+ScatterHist(CFB, "Def.Rank", "Winpct",
+            smoothmethod="lm",
+            title="Win Percentage vs. Offensive Rank")
+
+lm(Winpct~Off.Rank,data = CFB)
+lm(Winpct~Def.Rank,data = CFB)
+lm(Winpct~Def.Rank+Off.Rank,data = CFB)
 ```
 
 ```{r}
-CFB %>% separate(Team, c("College Team","NCAA"), " ",extra = "drop", fill = "right")
 CFB %>% 
-  separate(Team, c("College Team","NCAA")," ",)
+  separate(Team, c("College Team","NCAA"),sep = " (?=[^ ]+$)")
 
 CFB %>% 
-  separate(Team, c("College Team","NCAA")," ")%>%
-  ggplot(aes(x=CFB$NCAA,y=Winpct))+
+  separate(Team, c("College Team","NCAA"),sep = " (?=[^ ]+$)")%>%
+  ggplot(aes(x=NCAA,y=Winpct))+
   geom_bar(stat='identity',fill="blue")+
   ylab("Win Percentage")+xlab("NCAA")+coord_flip()
 ```
