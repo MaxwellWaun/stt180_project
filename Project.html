@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Junyu Chen" />
+
+
+<title>Project</title>
+
+<script src="Project_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="Project_files/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="Project_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="Project_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="Project_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="Project_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="Project_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="Project_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="Project_files/navigation-1.1/tabsets.js"></script>
+<link href="Project_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="Project_files/highlightjs-9.12.0/highlight.js"></script>
+<link href="Project_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="Project_files/pagedtable-1.1/js/pagedtable.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Project</h1>
+<h4 class="author">Junyu Chen</h4>
+<h4 class="date">4/4/2020</h4>
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>We have chosen to work on NCAA football data for our project. During this process, we hope to address which qualities of a particular football team leads to positive results for that team. Correlations between defensive, offensive and special team stats hopefully be apparent and good conclusions can be based off of them. Aside from learning how the game is actually played, we hope to gain a deeper insight into the sport. Human eyes are capable of good data analysis, but computing this data with R will hopefully help us learn about the inner mechanics of the game that aren’t very apparent without such computation.</p>
+</div>
+<div id="methods" class="section level1">
+<h1><span class="header-section-number">2</span> Methods</h1>
+<p>In order to accomplish this, the methods we will use are:</p>
+<ul>
+<li>both the dplyr and tidyverse libraries, including ggplot(), select(), mutate()</li>
+<li>linear model</li>
+<li>Multiple regression</li>
+</ul>
+</div>
+<div id="results" class="section level1">
+<h1><span class="header-section-number">3</span> Results</h1>
+<div id="does-defense-really-win-championships" class="section level2">
+<h2><span class="header-section-number">3.1</span> Does defense really win championships?</h2>
+<p><img src="Project_files/figure-html/unnamed-chunk-2-1.png" width="672" /><img src="Project_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<pre><code>
+Call:
+lm(formula = Winpct ~ Off.Rank, data = CFB)
+
+Coefficients:
+(Intercept)     Off.Rank  
+   0.730568    -0.003184  </code></pre>
+<pre><code>
+Call:
+lm(formula = Winpct ~ Def.Rank, data = CFB)
+
+Coefficients:
+(Intercept)     Def.Rank  
+   0.767201    -0.003743  </code></pre>
+</div>
+<div id="are-special-teams-of-particular-value-for-a-teams-performance" class="section level2">
+<h2><span class="header-section-number">3.2</span> Are special teams of particular value for a team’s performance?</h2>
+<p>Adjusted R2 does not increase if a new variable does not provide new information or is completely unrelated. Hence, we could use adjusted R2 for model selection. Here we will creat a full model which contains all feacture related to special teams.</p>
+<pre><code>
+Call:
+lm(formula = Winpct ~ Kickoff.Return.Rank + Kickoffs.Returned + 
+    Kickoff.Return.Touchdowns + Avg.Yard.per.Kickoff.Return + 
+    Punt.Return.Rank + Redzone.Field.Goals.Made, data = CFB)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.49507 -0.12075 -0.01935  0.13576  0.39524 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                  3.781e-01  5.372e-01   0.704  0.48295    
+Kickoff.Return.Rank         -8.523e-05  1.730e-03  -0.049  0.96078    
+Kickoffs.Returned           -7.491e-03  1.666e-03  -4.497 1.57e-05 ***
+Kickoff.Return.Touchdowns    3.656e-02  2.837e-02   1.288  0.20000    
+Avg.Yard.per.Kickoff.Return  1.070e-02  2.064e-02   0.518  0.60516    
+Punt.Return.Rank             4.367e-05  4.782e-04   0.091  0.92739    
+Redzone.Field.Goals.Made     1.160e-02  4.422e-03   2.623  0.00983 ** 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.1966 on 123 degrees of freedom
+Multiple R-squared:  0.218, Adjusted R-squared:  0.1799 
+F-statistic: 5.716 on 6 and 123 DF,  p-value: 2.856e-05</code></pre>
+<pre><code>
+Call:
+lm(formula = Winpct ~ Kickoffs.Returned + Redzone.Field.Goals.Made, 
+    data = CFB)
+
+Coefficients:
+             (Intercept)         Kickoffs.Returned  Redzone.Field.Goals.Made  
+                0.547174                 -0.005904                  0.013440  </code></pre>
+<p><img src="Project_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="which-collegiate-conference-is-the-best" class="section level2">
+<h2><span class="header-section-number">3.3</span> Which Collegiate Conference is the best?</h2>
+</div>
+<div id="whats-the-correlation-between-offensive-and-defensive-performance" class="section level2">
+<h2><span class="header-section-number">3.4</span> What’s the correlation between offensive and defensive performance?</h2>
+<p>Form cor.test(CFB<span class="math inline">\(Off.Rank,CFB\)</span>Def.Rank) function we can get the correlation between offensive and defensive is 0.04547697 which is too small and the p-value = 0.6074 is to large. Then we know that there is no correlation between offensive and defensive performance</p>
+<p><img src="Project_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="Project_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<pre><code>
+Call:
+lm(formula = Def.Rank ~ Off.Rank, data = CFB)
+
+Coefficients:
+(Intercept)     Off.Rank  
+   62.51343      0.04548  </code></pre>
+<pre><code>
+    Pearson&#39;s product-moment correlation
+
+data:  CFB$Off.Rank and CFB$Def.Rank
+t = 0.51505, df = 128, p-value = 0.6074
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.1277092  0.2159719
+sample estimates:
+       cor 
+0.04547697 </code></pre>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1><span class="header-section-number">4</span> Conclusion</h1>
+</div>
+<div id="reference" class="section level1">
+<h1><span class="header-section-number">5</span> Reference</h1>
+<ol style="list-style-type: decimal">
+<li><a href="https://www.kaggle.com/jeffgallini/college-football-team-stats-2019" class="uri">https://www.kaggle.com/jeffgallini/college-football-team-stats-2019</a></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
