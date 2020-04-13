@@ -1,15 +1,17 @@
 ---
-title: "Project"
-author: "Junyu Chen"
+title: "NCAA Football Analysis"
+author: "Junyu Chen, Max Waun"
 date: "4/4/2020"
-output: 
+output:
   html_document:
-    toc: true
-    number_sections: true
-    toc_float: true
-    theme: cerulean
     df_print: paged
+    number_sections: yes
     self_contained: no
+    theme: cerulean
+    toc: yes
+    toc_float: yes
+  word_document:
+    toc: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -19,15 +21,24 @@ knitr::opts_chunk$set(echo = FALSE,
                       comment = NA)
 ```
 
-# Introduction
-  We have chosen to work on NCAA football data for our project. During this process, we hope to address which qualities of a particular football team leads to positive results for that team. Correlations between defensive, offensive and special team stats hopefully be apparent and good conclusions can be based off of them. Aside from learning how the game is actually played, we hope to gain a deeper insight into the sport. Human eyes are capable of good data analysis, but computing this data with R will hopefully help us learn about the inner mechanics of the game that aren’t very apparent without such computation.
+# Introduction and Methods
+## Description of the dataset
 
-# Methods
+  
+## Questions
+
+
+## Methods
 In order to accomplish this, the methods we will use are:
 
-- both the dplyr and tidyverse libraries, including ggplot(), select(), mutate()
-- linear model
-- Multiple regression
+- Both the dplyr and tidyverse libraries, including ggplot(), select(), mutate()
+
+- `Simple linear regression`:
+    
+    For question 1: Since we want to determine defense really win championships or not, then we will show the relationship between defense and win percentage and the relationship between offense and win percentage and observe which one is stronger. Assume there is a linear relationship exists between a predictor defense/offense and response win percentage. 
+    
+- `Multiple regression`
+
 
 ```{r}
 library(dplyr)
@@ -38,19 +49,27 @@ library(ggExtra)
 library(WVPlots)
 
 CFB<-read.csv("CFB2019.csv")
-```
-
-# Results 
-## Does defense really win championships?
-```{r}
 CFB<-CFB %>%
   separate(Win.Loss, c("Win", "Loss"), "-") %>%
-  mutate(Winpct = as.numeric(Win)/Games,Avg.Rank=(Off.Rank+Def.Rank)/2) 
+  mutate(Winpct = as.numeric(Win)/Games,Avg.Rank=(Off.Rank+Def.Rank)/2)
+```
 
-#p1 <- CFB %>% ggplot(aes(Off.Rank,Winpct)) +geom_point()+stat_smooth(method = lm)+labs(title = "Win Percentage vs. Offensive Rank")
+# Results
 
-#p2 <- CFB %>% ggplot(aes(Def.Rank,Winpct)) +geom_point()+stat_smooth(method = lm)+labs(title = "Win Percentage vs. Defensive Rank")
+## Does defense really win championships?
+### Result of simple linear regression
 
+  We determined defense really win championships or not by showing the relationship between defense and win percentage and the relationship between offense and win percentage, observe which one is stronger. We use `simple linear regression` to do it and assume there is a linear relationship exists between a predictor defense/offense and response win percentage. 
+
+```{r}
+lm(Winpct~Off.Rank,data = CFB)
+lm(Winpct~Def.Rank,data = CFB)
+```
+
+Base on the function `lm()`, we can find the relation between Winpct and offence is Winpct = 0.730568 - 0.003184 * Off.Rank; the relation between Winpct and defense is Winpct = 0.767201 - 0.003743 * Off.Rank.
+
+### Result of the graphs
+```{r}
 ScatterHist(CFB, "Off.Rank", "Winpct",
             smoothmethod="lm",
             title="Win Percentage vs. Offensive Rank")
@@ -58,72 +77,78 @@ ScatterHist(CFB, "Off.Rank", "Winpct",
 ScatterHist(CFB, "Def.Rank", "Winpct",
             smoothmethod="lm",
             title="Win Percentage vs. Defensive Rank")
-
-
-
-lm(Winpct~Off.Rank,data = CFB) #better
-lm(Winpct~Def.Rank,data = CFB)
 ```
 
-## Are special teams of particular value for a team’s performance?
- Adjusted R2 does not increase if a new variable does not provide new information or is completely unrelated. Hence, we could use adjusted R2 for model selection. Here we will creat a full model which contains all feacture related to special teams.
-```{r}
-# Adjusted R2 does not increase if a new variable does not provide new information or is completely unrelated. Hence, we could use adjusted R2 for model selection.
 
+
+
+
+## Are special teams of particular value for a team’s performance?
+### Result of Multiple regression
+
+ Since winpct has many predictors which relate to the special team, then we use `Multiple regression` to find which special teams of particular value for a team’s performance.
+ 
+  First, we create a full model which contain all predictors and find which predictors have significance star will inference winpct;
+  
+```{r}
 #creat a full model which contains all feacture related to special teams 
 full.model<-lm(Winpct~Kickoff.Return.Rank + 
                  Kickoffs.Returned +
-                 #Kickoff.Return.Yards +
                  Kickoff.Return.Touchdowns +
                  Avg.Yard.per.Kickoff.Return +
                  Punt.Return.Rank+ 
                  Redzone.Field.Goals.Made,data = CFB)
-#we can see that only the predictor Kickoffs.Returned and Redzone.Field.Goals.Made has the significance star which will inference winpct
 summary(full.model)
+```
 
-#create another model which only include the predictor Kickoffs.Returned and Redzone.Field.Goals.Made
+  We can see that only the predictor Kickoffs.Returned and Redzone.Field.Goals.Made has the significance star which will inference winpct.
+  
+  Base on above result, create another model which only include the predictor Kickoffs.Returned and Redzone.Field.Goals.Made;
+  
+```{r}
 full.model.1<-lm(Winpct~ 
                  Kickoffs.Returned +
                  Redzone.Field.Goals.Made,data = CFB)
-
 full.model.1
-
-#winpct = 0.547174-0.005904*Kickoffs.Returned+0.013440*Redzone.Field.Goals.Made
-CFB %>%  ggplot(aes(Redzone.Field.Goals.Made,Winpct)) +geom_point(aes(color=Kickoffs.Returned))+stat_smooth(method = lm)
 ```
-
-## Which Collegiate Conference is the best?
+  
+  We can find that Winpct = 0.547174 - 0.005904 * Kickoffs.Returned + 0.013440 * Redzone.Field.Goals.Made.
+  
+### Result of the graphs
 ```{r}
-#CFB
-
-#CFB %>% 
-#  separate(Team, c("College Team","NCAA"),sep = " (") 
+CFB %>%ggplot(aes(Redzone.Field.Goals.Made,Winpct))+geom_point(aes(color=Kickoffs.Returned,size=Kickoffs.Returned))+stat_smooth(method = lm)+labs(title = "Redzone.Field.Goals.Made vs. Win percent")+ylab("Win percent")
 ```
 
-```{r}
-#CFB %>% 
-#  separate(Team, c("College Team","NCAA"),sep = " (?=[^ ]+$)")%>%
-#  ggplot(aes(x=NCAA,y=Winpct))+
-#  geom_bar(stat='identity',fill="blue")+
-#  ylab("Win Percentage")+xlab("NCAA")+coord_flip()
-```
+
+
+
+
 
 ## What’s the correlation between offensive and defensive performance?
+### Result of simple linear regression
 
-Form *cor.test(CFB$Off.Rank,CFB$Def.Rank)* function we can get the correlation between offensive and defensive is 0.04547697 which is too small and the p-value = 0.6074 is to large. Then we know that there is no correlation between offensive and defensive performance
+Assume there is a linear relationship exists between a predictor offense and response defense. 
 
 ```{r}
-ScatterHist(CFB, "Def.Rank", "Off.Rank",
-            smoothmethod="lm",
-            title="Defensive Rank vs. Offensive Rank")
-
-CFB %>% ggplot(aes(Off.Rank,Def.Rank)) +geom_point()+stat_smooth()
-
 lm(Def.Rank~Off.Rank,data = CFB)
-
-cor.test(CFB$Off.Rank,CFB$Def.Rank)
-#form cor.test(CFB$Off.Rank,CFB$Def.Rank) function we can get the correlation between offensive and defensive is 0.04547697 which is too small and the p-value = 0.6074 is to large. Then we know that there is no correlation between offensive and defensive performance
 ```
+
+Base on the function `lm()`, we can find the relation between Winpct and offence is Winpct =  62.51343 + 0.04548 * Off.Rank;
+
+### Result of correlation test
+
+```{r}
+cor.test(CFB$Off.Rank,CFB$Def.Rank)
+```
+
+Form `cor.test(Off.Rank,Def.Rank)` function we can get the correlation between offensive and defensive is 0.04547697 which is too small and the p-value = 0.6074 is to large. Then we know that there is no correlation between offensive and defensive performance
+
+### Result of the graphs
+```{r}
+CFB %>% ggplot(aes(Off.Rank,Def.Rank)) +geom_point()+stat_smooth(method = lm)+labs(title = "Defensive Rank vs. Offensive Rank")
+```
+
+  
 
 # Conclusion
 
@@ -134,3 +159,4 @@ cor.test(CFB$Off.Rank,CFB$Def.Rank)
 # Reference
 
 1. https://www.kaggle.com/jeffgallini/college-football-team-stats-2019
+2. https://www.kaggle.com/johnluke999/a-look-inside-the-college-football-season
