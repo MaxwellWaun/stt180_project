@@ -110,7 +110,7 @@ CFB %>%  ggplot(aes(Redzone.Field.Goals.Made,Winpct)) +geom_point(aes(color=Kick
 
 ## What’s the correlation between offensive and defensive performance?
 
-Form cor.test(CFB$Off.Rank,CFB$Def.Rank) function we can get the correlation between offensive and defensive is 0.04547697 which is too small and the p-value = 0.6074 is to large. Then we know that there is no correlation between offensive and defensive performance
+Form *cor.test(CFB$Off.Rank,CFB$Def.Rank)* function we can get the correlation between offensive and defensive is 0.04547697 which is too small and the p-value = 0.6074 is to large. Then we know that there is no correlation between offensive and defensive performance
 
 ```{r}
 ScatterHist(CFB, "Def.Rank", "Off.Rank",
