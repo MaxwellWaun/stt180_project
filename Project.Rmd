@@ -2,12 +2,14 @@
 title: "NCAA Football Analysis"
 author: "Junyu Chen, Max Waun"
 date: "4/4/2020"
-output: 
+output:
   html_document:
-    toc: true
-    number_sections: true
-    toc_float: true
     df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
 ---
 <style type="text/css">
 /* Title */
@@ -42,7 +44,8 @@ knitr::opts_chunk$set(echo = FALSE,
                       comment = NA)
 ```
 
-## Introduction{-}
+
+## Introduction & Methodologies{-}
 
 College sporting events are beloved by not only college students, but also the majority of the United States. From sports gambling to big championship viewing parties, people everywhere take these games seriously. To further discover what gives these teams the upper hand against each other, we decided to search for the answers for questions we think are key to unlocking the hidden mechanics of football. 
 
@@ -50,6 +53,7 @@ College sporting events are beloved by not only college students, but also the m
 - Does defense really win championships?
 - Are special teams of particular value for a team’s performance?
 - What’s the correlation between offensive and defensive performance?
+
 
 ### Description of the dataset{-}
 
@@ -64,19 +68,10 @@ library(ggExtra)
 library(WVPlots)
 
 CFB<-read.csv("CFB2019.csv")
-head(CFB)
+head(CFB,3)
 ```
 
-## Methods{-}
-
-Since we want to how what factors affect the championships, we will separate the Win.Loss colume, then let win games divideevided total games and add these number to one colume called Winpct, which means win percentage. Below are some of the new colume in the data.
-
-```{r add winpct}
-CFB<-CFB %>%
-  separate(Win.Loss, c("Win", "Loss"), "-") %>%
-  mutate(Winpct = as.numeric(Win)/Games,Avg.Rank=(Off.Rank+Def.Rank)/2)
-head(CFB[c("Win","Loss","Games","Winpct")])
-```
+### Methods{-}
 
 In order to accomplish above questions, the methods we will use are:
 
@@ -88,13 +83,22 @@ In order to accomplish above questions, the methods we will use are:
 
 - Function `cor()`
 
-For question 1, we determined defense really win championships or not by showing the relationship between defense and win percentage and the relationship between offense and win percentage, observe which one is stronger. We use `simple linear regression` to do it and assume there is a linear relationship exists between a predictor defense/offense and response win percentage.
+For question 1, we determined whether or not defense really wins championships by showing the relationship between defense and win percentage and the relationship between offense and win percentage. Then we observed which one is stronger. We will use `simple linear regression` to accomplish this and hope to see if there is a linear relationship that exists between a predictor defense/offense and a responding win percentage.
 
-For question 2, since winpct has many predictors which relate to the special team, then we use `Multiple regression` to find which special teams of particular value for a team’s performance. First, we create a full model which contain all predictors and find which predictors have significance star will inference winpct. Next, we will create another model which only include predictors have significance star will inference winpct. Last, we can find the relation between winpct and the predictors which are relate to the special team.
+For question 2, since winpct has many predictors which relate to the special team, we will use `Multiple regression` to find out whether special teams are of a particular value for a team’s performance. First, we created a full model which contains all predictors and find which predictors have significance star will inference winpct. Next, we will create another model which only includes predictors that have a significance star that will inference winpct. Last, we can find the relationship between winpct and the predictors which that relate to the special team.
 
-For question 3, we will use `Simple linear regression` to find the relation between defense and offense too. We assume there is a linear relationship exists between a predictor offense and response defense. What's more, we will use function `cor()` to find the correlation between offense and defense.
+For question 3, we will use `Simple linear regression` to find the relation between defense and offense too. We assume there is a linear relationship that exists between a predictor offense and a response defense. Additionally, we will use the function `cor()` to find the correlation between offense and defense in hopes to come to stronger conclusions. 
 
 ## Results{-}
+
+Since we want to know what factors affect the championships, we will separate the Win.Loss column, then let win games devided total games and add these numbers to one colume called Winpct, which means win percentage. Below are some of the new columns in the data.
+
+```{r add winpct}
+CFB<-CFB %>%
+  separate(Win.Loss, c("Win", "Loss"), "-") %>%
+  mutate(Winpct = as.numeric(Win)/Games,Avg.Rank=(Off.Rank+Def.Rank)/2)
+head(CFB[c("Win","Loss","Games","Winpct")])
+```
 
 ### 1. Does defense really win championships?{-}
 #### Result of simple linear regression{-}
@@ -104,7 +108,7 @@ lm(Winpct~Off.Rank,data = CFB)
 lm(Winpct~Def.Rank,data = CFB)
 ```
 
-- Base on the function `lm()`, we can find the relation between Winpct and offence is Winpct = 0.730568 - 0.003184 * Off.Rank; the relation between Winpct and defense is Winpct = 0.767201 - 0.003743 * Off.Rank.
+Usung the function `lm()`, we can find the relation between Winpct and offence is Winpct = 0.730568 - 0.003184 * Off.Rank; the relation between Winpct and defense is Winpct = 0.767201 - 0.003743 * Off.Rank.
 
 #### Result of the graphs{-}
 ```{r hist plot}
@@ -117,14 +121,14 @@ ScatterHist(CFB, "Def.Rank", "Winpct",
             title="Win Percentage vs. Defensive Rank")
 ```
 
-- As we would expect to see, the better rank you are for defense/offense (rank 1 being the best) the better your win percentage is. Because the slope of the regression line of the defensive rank is steeper than that of the offensive rank, we can conclude that defense is slightly more important than offense as it leads to a better win  percentage. 
+As we would expect to see, the better rank you are for defense/offense (rank 1 being the best) the better your win percentage is. Because the slope of the regression line of the defensive rank is steeper than that of the offensive rank, we can conclude that defense is slightly more important than offense as it leads to a better win  percentage. 
 
 
 
 ### 2. Are special teams of particular value for a team’s performance?{-}
 #### Result of Multiple regression{-}
 
-- First, we create a full model which contain all predictors and find which predictors have significance star will inference winpct;
+First, we create a full model which contain all predictors and find which predictors have significance star will inference winpct;
   
 ```{r create full model}
 #creat a full model which contains all feacture related to special teams 
@@ -137,9 +141,7 @@ full.model<-lm(Winpct~Kickoff.Return.Rank +
 summary(full.model)
 ```
 
-- We can see that only the predictor Kickoffs.Returned and Redzone.Field.Goals.Made has the significance star which will inference winpct.
-  
-- Base on above result, create another model which only include the predictor Kickoffs.Returned and Redzone.Field.Goals.Made;
+We can see that only the predictor Kickoffs.Returned and Redzone.Field.Goals.Made has the significance star which will inference winpct. Base on above result, create another model which only include the predictor Kickoffs.Returned and Redzone.Field.Goals.Made;
   
 ```{r creat another model}
 full.model.1<-lm(Winpct~ 
@@ -148,14 +150,14 @@ full.model.1<-lm(Winpct~
 full.model.1
 ```
   
-- We can find that Winpct = 0.547174 - 0.005904 * Kickoffs.Returned + 0.013440 * Redzone.Field.Goals.Made.
+We can find that Winpct = 0.547174 - 0.005904 * Kickoffs.Returned + 0.013440 * Redzone.Field.Goals.Made.
   
 #### Result of the graphs{-}
 ```{r}
 CFB %>%ggplot(aes(Redzone.Field.Goals.Made,Winpct))+geom_point(aes(color=Kickoffs.Returned,size=Kickoffs.Returned))+stat_smooth(method = lm)+labs(title = "Redzone.Field.Goals.Made vs. Win percent")+ylab("Win percent")
 ```
 
-- From the graph, we concluded that there is a positive correlation between field goals made and win percentage. Specifically, the more field goals made, the better the win percentage. However, upon further investigation of special teams, we’ve concluded that the number kickoff return yards have no correlation to win percentage. Finally, we can see that one team has over 60 kickoffs returned, suggesting they’ve been scored on a lot which would then require them to return a kickoff. This would explain their poor win percentage.
+From the graph, we concluded that there is a positive correlation between field goals made and win percentage. Specifically, the more field goals made, the better the win percentage. However, upon further investigation of special teams, we’ve concluded that the number kickoff return yards have no correlation to win percentage. Finally, we can see that one team has over 60 kickoffs returned, suggesting they’ve been scored on a lot which would then require them to return a kickoff. This would explain their poor win percentage.
 
 
 ### 3. What’s the correlation between offensive and defensive performance?{-}
@@ -165,7 +167,7 @@ CFB %>%ggplot(aes(Redzone.Field.Goals.Made,Winpct))+geom_point(aes(color=Kickoff
 lm(Def.Rank~Off.Rank,data = CFB)
 ```
 
-- Base on the function `lm()`, we can find the relation between Winpct and offence is Winpct =  62.51343 + 0.04548 * Off.Rank;
+Base on the function `lm()`, we can find the relation between Winpct and offence is Winpct =  62.51343 + 0.04548 * Off.Rank;
 
 #### Result of correlation test{-}
 
@@ -173,20 +175,22 @@ lm(Def.Rank~Off.Rank,data = CFB)
 cor.test(CFB$Off.Rank,CFB$Def.Rank)
 ```
 
-- Form `cor.test(Off.Rank,Def.Rank)` function we can get the correlation between offensive and defensive is 0.04547697 which is too small and the p-value = 0.6074 is to large. Then we know that there is no correlation between offensive and defensive performance
+Form `cor.test(Off.Rank,Def.Rank)` function we can get the correlation between offensive and defensive is 0.04547697 which is too small and the p-value = 0.6074 is to large. Then we know that there is no correlation between offensive and defensive performance
 
 #### Result of the graphs{-}
 ```{r}
 CFB %>% ggplot(aes(Off.Rank,Def.Rank)) +geom_point()+stat_smooth(method = lm)+labs(title = "Defensive Rank vs. Offensive Rank")
 ```
 
-- We found no correlation between an offensive and defensive rank. As one might expect, since they are two different teams, they do not contribute to each other’s performance. This was our initial thought, but now we know this is fact, and can conclude each rank is independent from one another. 
+We found no correlation between an offensive and defensive rank. As one might expect, since they are two different teams, they do not contribute to each other’s performance. This was our initial thought, but now we know this is fact, and can conclude each rank is independent from one another. 
 
 
 ## Conclusion{-}
 
 We conclude that teams win championships based more on their defensive performance rather than their offensive performance. Although the two teams (offensive and defensive) both contribute to a teams win percentage, it appears based on the slopes of the graphs that defensive skill matters slightly more. Additionally, regarding special teams, our findings show that their best contribution to win percentage is their ability to consistently make field goals. Returning kickoffs, punting the ball far and other stats do not correlate to win percentage. On the other hand, the more kickoffs a special team receives, the greater chance of their win percentage decreasing, as kickoff returns and win percentage are inversely proportional.
+We think the methods we used led us to good and clear conclusions.
 
+To improve our analysis, we could have picked a better question for question 3. After learning the answer for question 3 ourselves, we realized that the answer was somewhat obvious, as defensive performance shouldn't affect the performance of it's offensive team. We weren't very limited from a data standpoint, as the data we used had more columns than we knew what to do with. Something we also could have done to improve this project would be to make more columns in the dataset by combining two or more stats together and comparing them with two more stats, to get an even more in depth analysis instead of comparing one stat to another singular stat. Future questions that could be answered from our methodologies would be whether or not a team has a better chance of winning if they always kick the field goal after scoring a touch down, or if they always go for a two point conversion instead. This could be done by using simple linear regression and plotting the results. Overall we think we made accurate and clear conclusions from our analysis. 
 
 
 ## Reference{-}
